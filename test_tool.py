@@ -6,14 +6,9 @@ ingestion_tool = IngestionTool("testing")
 
 @pytest.fixture(scope="session", autouse=True)
 def manage_test_context():
-       with open('setup_test_context.sql', 'r') as sql_file:
-              sql_script = sql_file.read()
-
-       connection = sqlite3.connect('input/test.db')
-       cursor = connection.cursor()
-       cursor.executescript(sql_script)
-       connection.close()
+       setup_test_context()
        yield
+       teardown_test_context()
 
 def test_insert_data_to_oracle_db():
        # Run code
@@ -28,6 +23,22 @@ def test_insert_data_to_oracle_db():
        # Asserts
        assert len(data) > 0
        assert data[0][1] == ingestion_tool.config.TEST_CLOB
+
+def setup_test_context():
+       with open('setup_test_context.sql', 'r') as sql_file:
+              sql_script = sql_file.read()
+       connection = sqlite3.connect('input/test.db')
+       cursor = connection.cursor()
+       cursor.executescript(sql_script)
+       connection.close()
+
+def teardown_test_context():
+       with open('teardown_test_context.sql', 'r') as sql_file:
+              sql_script = sql_file.read()
+       connection = sqlite3.connect('input/test.db')
+       cursor = connection.cursor()
+       cursor.executescript(sql_script)
+       connection.close()
 
 
 

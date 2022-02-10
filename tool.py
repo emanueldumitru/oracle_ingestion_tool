@@ -17,23 +17,13 @@ class IngestionTool:
         self.config = conf
         self.connection = conf.create_connection()
 
-    def clear_data_from_oracle(self):
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute(self.config.SQL_DELETE_QUERY)
-            self.connection.commit()
-        except cx_Oracle.Error as error:
-            print("Error occurred: ", error)
-
-
     def insert_data_to_oracle_db(self):
         try:
             with open(self.config.CLOB_DATA_FILE_PATH, 'r') as f:
                 text_data = f.read()
 
             cursor = self.connection.cursor()
-            cursor.execute("""INSERT INTO CLOB_TBL(ID, C) VALUES (:lobid, :clobdata)""", {
-                                    "lobid": 1,
+            cursor.execute("""INSERT INTO CLOB_TBL(C) VALUES (:clobdata)""", {
                                     "clobdata": text_data
                                 })
             self.connection.commit()
@@ -69,12 +59,9 @@ class IngestionTool:
 
     def close_connection(self):
         self.connection.close()
-        print(f">>> Finished successfully")
-
 
 def main():
     tool = IngestionTool('default')
-    tool.clear_data_from_oracle()
     tool.insert_data_to_oracle_db()
     tool.pa_table_to_parquet_file()
     tool.close_connection()

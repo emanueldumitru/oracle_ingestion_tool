@@ -1,0 +1,1 @@
+DROP TABLE clob_tbl;

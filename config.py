@@ -16,7 +16,6 @@ class DevelopmentConfig(Config):
     ORACLE_PASS = "passtest"
     DEBUG = True
     SQL_QUERY = "SELECT ID, C FROM CLOB_TBL"
-    SQL_DELETE_QUERY = "DELETE FROM CLOB_TBL where 1=1"
     CLOB_DATA_FILE_PATH = f"{basedir}/input/example.txt"
     PARQUET_OUTPUT_FILE_PATH = f"{basedir}/output/clob.parquet"
 

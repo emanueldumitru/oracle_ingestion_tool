@@ -1,10 +1,5 @@
 CREATE TABLE clob_tbl (
-    id NUMBER,
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
     c CLOB
 );
-
-
-select * from clob_tbl;
-
-delete from clob_tbl where id=1;
 
